@@ -17,7 +17,7 @@ rm -rf out/target/product/fog
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b yaapbq2 --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b 25qx-staging --depth 1
 git clone https://github.com/AloozChips/device_xiaomi_fog-kernel.git device/xiaomi/fog-kernel -b ksu-and-bpf --depth 1
-git clone https://github.com/LineageOS/android_hardware_xiaomi.git hardware/xiaomi -b lineage-23.2 --depth 1
+git clone https://github.com/yaap/hardware_xiaomi.git hardware/xiaomi -b sixteen --depth 1
 
 export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
