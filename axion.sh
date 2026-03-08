@@ -1,0 +1,41 @@
+#!/bin/bash
+
+rm -rf .repo/local_manifests
+rm -rf packages/apps/Updater
+
+repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.2 --git-lfs
+
+/opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+#safer sync
+/opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+
+pushd packages/apps/Updater
+git fetch https://github.com/AloozChips/axion_updater.git && git cherry-pick 822ea1caa95bdbf1bf4b17cd9789184f0df8eb0c
+popd
+
+rm -rf device/xiaomi/fog
+rm -rf vendor/xiaomi/fog
+rm -rf device/xiaomi/fog-kernel
+rm -rf hardware/xiaomi
+rm -rf vendor/xiaomi/camera
+rm -rf out/target/product/fog
+
+git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b axion --depth 1
+git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b baklava-and-beyond --depth 1
+git clone https://github.com/AloozChips/device_xiaomi_fog-kernel.git device/xiaomi/fog-kernel -b ksu-and-bpf --depth 1
+git clone https://github.com/LineageOS/android_hardware_xiaomi.git hardware/xiaomi -b lineage-23.2 --depth 1
+git clone https://gitlab.com/ThankYouMario/proprietary_vendor_xiaomi_camera.git vendor/xiaomi/camera -b vauxite-sm6225 --depth 1
+
+export TZ=Asia/Dhaka
+export BUILD_USERNAME=AloozChips
+export BUILD_HOSTNAME=crave
+export WITH_GMS=true
+export TARGET_GMS_EXTRAS=true
+export TARGET_BUILD_VARIANT=user
+export PRODUCT_NO_CAMERA=false
+export TARGET_PREBUILT_GOOGLE_CAMERA=false
+export TARGET_SHIP_PIXEL_LAUNCHER=false
+
+. build/envsetup.sh
+axion lineage_fog user gms pico
+ax -br user -j$(nproc --all)
