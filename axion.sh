@@ -41,5 +41,5 @@ export TARGET_PREBUILT_GOOGLE_CAMERA=false
 export TARGET_SHIP_PIXEL_LAUNCHER=false
 
 . build/envsetup.sh
-axion lineage_fog user gms pico
+axion fog user gms pico
 ax -br user -j$(nproc --all)
