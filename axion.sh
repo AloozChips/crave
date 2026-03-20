@@ -38,5 +38,13 @@ export TARGET_PREBUILT_GOOGLE_CAMERA=false
 export TARGET_SHIP_PIXEL_LAUNCHER=false
 
 . build/envsetup.sh
-axion fog user gms || axion fog user gms pico
+
+if axion fog user gms; then
+    echo ">>> Full GMS build selected"
+else
+    echo ">>> Full GMS failed, fallback to Pico"
+    axion fog user gms pico
+fi
+
+axionSync
 ax -br user -j$(nproc --all)
