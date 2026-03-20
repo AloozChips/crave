@@ -30,12 +30,11 @@ export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
 export BUILD_HOSTNAME=crave
 export WITH_GMS=true
-export TARGET_GMS_EXTRAS=true
 export TARGET_BUILD_VARIANT=user
 export PRODUCT_NO_CAMERA=false
 export TARGET_PREBUILT_GOOGLE_CAMERA=false
 export TARGET_SHIP_PIXEL_LAUNCHER=false
 
 . build/envsetup.sh
-axion fog user gms pico
+axion fog user gms
 ax -br user -j$(nproc --all)
