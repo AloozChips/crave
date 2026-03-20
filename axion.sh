@@ -8,6 +8,10 @@ repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.2 --git-lfs
 #safer sync
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
+pushd packages/apps/Updater
+git fetch https://github.com/AloozChips/axion_updater.git && git cherry-pick ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd
+popd
+
 rm -rf device/xiaomi/fog
 rm -rf vendor/xiaomi/fog
 rm -rf device/xiaomi/fog-kernel
