@@ -32,6 +32,7 @@ export WITH_GMS=true
 export TARGET_CORE_GMS=false
 export TARGET_GMS_EXTRAS=true
 export TARGET_BUILD_VARIANT=user
+export TARGET_INCLUDE_AXFX=true
 export PRODUCT_NO_CAMERA=false
 export TARGET_PREBUILT_GOOGLE_CAMERA=false
 export TARGET_SHIP_PIXEL_LAUNCHER=false
