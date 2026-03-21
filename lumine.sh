@@ -40,5 +40,5 @@ export TARGET_BUILD_VARIANT=user
 
 . build/envsetup.sh
 lunch fog-bp4a-user
-make clean
+m clean
 mka bacon -j$(nproc --all)
