@@ -3,6 +3,7 @@
 rm -rf .repo/local_manifests
 rm -rf packages/apps/Updater
 rm -rf vendor/lumine
+rm -rf build/soong
 
 repo init -u https://github.com/LumineDroid/platform_manifest -b bellflower --git-lfs
 
