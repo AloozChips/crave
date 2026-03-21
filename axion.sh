@@ -43,5 +43,4 @@ export TARGET_SHIP_PIXEL_LAUNCHER=false
 
 . build/envsetup.sh
 axion fog user gms
-axionSync
 ax -br user -j$(nproc --all)
