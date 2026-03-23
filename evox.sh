@@ -42,6 +42,7 @@ export BUILD_USERNAME=AloozChips
 export BUILD_HOSTNAME=crave
 export WITH_GMS=true
 export TARGET_BUILD_VARIANT=user
+export PERF_ANIM_OVERRIDE=true
 
 . build/envsetup.sh
 lunch lineage_fog-bp4a-user
