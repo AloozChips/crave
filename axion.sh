@@ -9,7 +9,8 @@ repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.2 --git-lfs
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
 pushd packages/apps/Updater
-git fetch https://github.com/AloozChips/axion_updater.git && git cherry-pick ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd
+git fetch https://github.com/AloozChips/axion_updater.git
+git cherry-pick ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd || git cherry-pick --abort
 popd
 
 rm -rf device/xiaomi/fog
@@ -35,11 +36,13 @@ export BUILD_HOSTNAME=crave
 export WITH_GMS=true
 export TARGET_CORE_GMS=false
 export TARGET_GMS_EXTRAS=true
+export PERF_ANIM_OVERRIDE=false
 export TARGET_BUILD_VARIANT=user
 export TARGET_INCLUDE_AXFX=true
 export PRODUCT_NO_CAMERA=false
 export TARGET_PREBUILT_GOOGLE_CAMERA=false
 export TARGET_SHIP_PIXEL_LAUNCHER=false
+export TARGET_SUPPORTS_FACE_UNLOCK=true
 
 . build/envsetup.sh
 axion fog user gms
