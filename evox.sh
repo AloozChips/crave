@@ -48,3 +48,32 @@ export PERF_ANIM_OVERRIDE=false
 lunch lineage_fog-bp4a-user
 m installclean
 m evolution -j$(nproc --all)
+
+pushd out/target/product/fog || { echo ">>> Directory not found!"; exit 1; }
+
+shopt -s nocaseglob
+
+files=( *evolution*.zip )
+
+if [ ! -e "${files[0]}" ]; then
+    echo ">>> Error: No file found!"
+    shopt -u nocaseglob
+    popd
+    exit 1
+fi
+
+if [ ${#files[@]} -gt 1 ]; then
+    echo ">>> Warning: Multiple files found. Uploading the first one: ${files[0]}"
+fi
+
+if curl -T "${files[0]}" -u ":916da83f-7303-42b6-9087-9ea56551ce94" https://pixeldrain.com/api/file/; then
+    echo -e "\n>>> pixeldrain upload done!"
+else
+    echo -e "\n>>> pixeldrain upload failed!"
+    shopt -u nocaseglob
+    popd
+    exit 1
+fi
+
+shopt -u nocaseglob
+popd
