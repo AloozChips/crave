@@ -54,7 +54,7 @@ rm -rf device/xiaomi/fog \
        vendor/xiaomi/camera \
        packages/apps/DolbyUI \
        hardware/dolby \
-       out/target/product/fog/
+       out/target/product/fog
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b axionbp4a --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b baklava-and-beyond --depth 1
