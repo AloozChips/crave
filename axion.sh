@@ -2,7 +2,7 @@
 
 START_TIME=$(date +%s)
 
-TG_TOKEN="8720742374:AAFhqXpfzrTKeYu-IO_X08RSHTSjwIuu1c"
+TG_TOKEN="8720742374:AAFhqX9pfzrTKeYu-IO_X08RSHTSjwIuu1c"
 TG_CHAT_ID="6087243184"
 ROM_DIR="out/target/product/fog"
 
