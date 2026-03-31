@@ -1,8 +1,39 @@
 #!/bin/bash
 
-rm -rf .repo/local_manifests
-rm -rf frameworks/av
-rm -rf packages/apps/Updater
+START_TIME=$(date +%s)
+
+TG_TOKEN="8720742374:AAFhqX9pfzrTKeYu-IO_X08RSHTSjwIuu1c"
+TG_CHAT_ID="6087243184"
+ROM_DIR="out/target/product/fog"
+
+send_initial_msg() {
+    RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
+        -d chat_id="$TG_CHAT_ID" \
+        -d text="🚀 <b>Build Started: EvolutionX for fog/wind/rain</b>" \
+        -d parse_mode="HTML")
+
+    MSG_ID=$(echo "$RESPONSE" | grep -oP '"message_id":\K[0-9]+')
+}
+
+edit_msg() {
+    curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/editMessageText" \
+        -d chat_id="$TG_CHAT_ID" \
+        -d message_id="$MSG_ID" \
+        -d text="$1" \
+        -d parse_mode="HTML" > /dev/null
+}
+
+send_msg() {
+    curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
+        -d chat_id="$TG_CHAT_ID" \
+        -d text="$1" \
+        -d parse_mode="HTML" > /dev/null
+}
+
+send_initial_msg
+
+rm -rf packages/apps/Updater \
+       frameworks/av
 
 repo init -u https://github.com/Evolution-X/manifest -b bq2 --git-lfs
 
@@ -10,23 +41,25 @@ repo init -u https://github.com/Evolution-X/manifest -b bq2 --git-lfs
 #safer sync
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
-pushd frameworks/av
-git fetch https://github.com/AloozChips/frameworks_av.git && git cherry-pick aa1fd74e803570e1f8b4814ddf04b8b20c2e13c5
-popd
-
 pushd packages/apps/Updater
-git fetch https://github.com/AloozChips/evo_updater.git && git cherry-pick a633145592f88ac8c36236b20eead2047b9dc540
+git fetch https://github.com/AloozChips/evo_updater.git a633145592f88ac8c36236b20eead2047b9dc540
+git cherry-pick a633145592f88ac8c36236b20eead2047b9dc540 || git cherry-pick --abort
 popd
 
-rm -rf device/xiaomi/fog
-rm -rf vendor/xiaomi/fog
-rm -rf device/xiaomi/fog-kernel
-rm -rf hardware/xiaomi
-rm -rf vendor/xiaomi/camera
-rm -rf packages/apps/ViPER4AndroidFX
-rm -rf packages/apps/DolbyUI
-rm -rf hardware/dolby
-rm -rf out/target/product/fog
+pushd frameworks/av
+git fetch https://github.com/AloozChips/frameworks_av.git aa1fd74e803570e1f8b4814ddf04b8b20c2e13c5
+git cherry-pick aa1fd74e803570e1f8b4814ddf04b8b20c2e13c5 || git cherry-pick --abort
+popd
+
+rm -rf device/xiaomi/fog \
+       vendor/xiaomi/fog \
+       device/xiaomi/fog-kernel \
+       hardware/xiaomi \
+       vendor/xiaomi/camera \
+       packages/apps/ViPER4AndroidFX \
+       packages/apps/DolbyUI \
+       hardware/dolby \
+       out/target/product/fog
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evox --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b baklava-and-beyond --depth 1
@@ -49,31 +82,46 @@ lunch lineage_fog-bp4a-user
 m installclean
 m evolution -j$(nproc --all)
 
-pushd out/target/product/fog || { echo ">>> Directory not found!"; exit 1; }
+END_TIME=$(date +%s)
+DIFF=$((END_TIME - START_TIME))
+TOTAL_BUILD_TIME="$(($DIFF / 3600))h $(($DIFF % 3600 / 60))m $(($DIFF % 60))s"
 
-shopt -s nocaseglob
+ZIP=$(find "$ROM_DIR" -maxdepth 1 -type f -iname "*evolution*.zip" -printf '%T@ %p\n' | sort -n | tail -1 | cut -f2- -d" ")
 
-files=( *evolution*.zip )
+if [[ -f "$ZIP" ]]; then
+    FILENAME=$(basename "$ZIP")
+    BUILD_DATE=$(date "+%Y-%m-%d %H:%M:%S")
+    MD5_HASH=$(md5sum "$ZIP" | awk '{ print $1 }')
+    SHA256_HASH=$(sha256sum "$ZIP" | awk '{ print $1 }')
 
-if [ ! -e "${files[0]}" ]; then
-    echo ">>> Error: No file found!"
-    shopt -u nocaseglob
-    popd
-    exit 1
-fi
+    edit_msg "✅ <b>Build Completed!</b> 🎉
 
-if [ ${#files[@]} -gt 1 ]; then
-    echo ">>> Warning: Multiple files found. Uploading the first one: ${files[0]}"
-fi
-
-if curl -T "${files[0]}" -u ":916da83f-7303-42b6-9087-9ea56551ce94" https://pixeldrain.com/api/file/; then
-    echo -e "\n>>> pixeldrain upload done!"
+📦 <b>File:</b> <code>$FILENAME</code>
+📱 <b>Device:</b> Redmi 10C (fog/wind/rain)
+⏰ <b>Time:</b> $BUILD_DATE
+⏱️ <b>Total Build Time:</b> $TOTAL_BUILD_TIME
+🔐 <b>MD5:</b> <code>$MD5_HASH</code>
+🛡️ <b>SHA-256:</b> <code>$SHA256_HASH</code>"
 else
-    echo -e "\n>>> pixeldrain upload failed!"
-    shopt -u nocaseglob
-    popd
+    edit_msg "❌ <b>Build Failed: EvolutionX for fog/wind/rain.</b>
+No zip found in $ROM_DIR."
     exit 1
 fi
 
-shopt -u nocaseglob
-popd
+pushd $ROM_DIR > /dev/null
+
+send_msg "📦 Uploading to Pixeldrain..."
+
+PD_RESPONSE=$(curl -s -T "$FILENAME" -u ":916da83f-7303-42b6-9087-9ea56551ce94" https://pixeldrain.com/api/file/)
+PD_ID=$(echo "$PD_RESPONSE" | grep -oP '"id":"\K[^"]+')
+
+if [[ -n "$PD_ID" ]]; then
+    DOWNLOAD_LINK="https://pixeldrain.com/u/$PD_ID"
+    send_msg "✅ <b>Upload successful!</b>
+📥 <b>Download Link:</b> $DOWNLOAD_LINK"
+else
+    send_msg "❌ Pixeldrain upload failed.
+API Response: <code>$PD_RESPONSE</code>"
+fi
+
+popd > /dev/null
