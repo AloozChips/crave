@@ -9,7 +9,7 @@ ROM_DIR="out/target/product/fog"
 send_initial_msg() {
     RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
         -d chat_id="$TG_CHAT_ID" \
-        -d text="🚀 <b>Build Started:</b> AxionAOSP for fog/wind/rain" \
+        -d text="🚀 <b>Build Started: AxionAOSP for fog/wind/rain"</b> \
         -d parse_mode="HTML")
 
     MSG_ID=$(echo "$RESPONSE" | grep -oP '"message_id":\K[0-9]+')
@@ -82,7 +82,8 @@ export TARGET_SUPPORTS_FACE_UNLOCK=true
 axion fog user gms
 
 if ! ax -br user -j$(nproc --all); then
-    edit_msg "❌ <b>Build Failed:</b> AxionAOSP for fog/wind/rain\n\nCompilation error encountered."
+    edit_msg "❌ <b>Build Failed: AxionAOSP for fog/wind/rain.</b>
+Compilation error encountered."
     exit 1
 fi
 
@@ -109,7 +110,8 @@ if [[ -f "$ZIP" ]]; then
 🛡️ <b>SHA-256:</b> <code>$SHA256_HASH</code>"
 
 else
-    edit_msg "❌ <b>Build Failed:</b> AxionAOSP for fog/wind/rain\n\nNo zip found in $ROM_DIR."
+    edit_msg "❌ <b>Build Failed: AxionAOSP for fog/wind/rain.</b>
+No zip found in $ROM_DIR."
     exit 1
 fi
 
@@ -122,9 +124,11 @@ PD_ID=$(echo "$PD_RESPONSE" | grep -oP '"id":"\K[^"]+')
 
 if [[ -n "$PD_ID" ]]; then
     DOWNLOAD_LINK="https://pixeldrain.com/u/$PD_ID"
-    send_msg "✅ <b>Upload successful!</b>\n\n📥 <b>Download Link:</b> $DOWNLOAD_LINK"
+    send_msg "✅ <b>Upload successful!</b>
+📥 <b>Download Link:</b> $DOWNLOAD_LINK"
 else
-    send_msg "❌ Pixeldrain upload failed.\n\nAPI Response: <code>$PD_RESPONSE</code>"
+    send_msg "❌ Pixeldrain upload failed.
+API Response: <code>$PD_RESPONSE</code>"
     popd > /dev/null
 fi
 
