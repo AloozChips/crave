@@ -38,12 +38,12 @@ repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.2 --git-lfs
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
 pushd packages/apps/Updater
-git fetch https://github.com/AloozChips/axion_updater.git
-(git cherry-pick ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd --no-edit && echo "patched custom OTA")  || (git cherry-pick --abort && echo "failed to patch custom OTA!")
+git fetch https://github.com/AloozChips/axion_updater.git ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd
+git cherry-pick ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd || git cherry-pick --abort
 popd
 
 pushd bionic
-(git revert 9857de532657f1f0d5147bbbbb713e281e514670 --no-edit && echo "reverted [jemalloc] dual allocator support (jemalloc default + Scudo fallback)") || (git revert --abort && echo "failed reverting [jemalloc] dual allocator support (jemalloc default + Scudo fallback)!")
+git revert 9857de532657f1f0d5147bbbbb713e281e514670 --no-edit || git revert --abort
 popd
 
 rm -rf device/xiaomi/fog \
