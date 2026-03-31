@@ -2,14 +2,14 @@
 
 START_TIME=$(date +%s)
 
-TG_TOKEN="8720742374:AAFhqX9pfzrTKeYu-IO_X08RSHTSjwIuu1c"
+TG_TOKEN="8720742374:AAFhqXpfzrTKeYu-IO_X08RSHTSjwIuu1c"
 TG_CHAT_ID="6087243184"
 ROM_DIR="out/target/product/fog"
 
 send_initial_msg() {
     RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
         -d chat_id="$TG_CHAT_ID" \
-        -d text="🚀 <b>Build Started: AxionAOSP for fog/wind/rain"</b> \
+        -d text="🚀 <b>Build Started: AxionAOSP for fog/wind/rain</b>" \
         -d parse_mode="HTML")
 
     MSG_ID=$(echo "$RESPONSE" | grep -oP '"message_id":\K[0-9]+')
@@ -35,7 +35,6 @@ send_initial_msg
 repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.2 --git-lfs
 
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-# safer sync
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
 pushd packages/apps/Updater
@@ -81,11 +80,7 @@ export TARGET_SUPPORTS_FACE_UNLOCK=true
 . build/envsetup.sh
 axion fog user gms
 
-if ! ax -br user -j$(nproc --all); then
-    edit_msg "❌ <b>Build Failed: AxionAOSP for fog/wind/rain.</b>
-Compilation error encountered."
-    exit 1
-fi
+ax -br user -j$(nproc --all)
 
 END_TIME=$(date +%s)
 DIFF=$((END_TIME - START_TIME))
@@ -96,7 +91,7 @@ ZIP=$(find "$ROM_DIR" -maxdepth 1 -type f -iname "*axion*.zip" -printf '%T@ %p\n
 if [[ -f "$ZIP" ]]; then
     FILENAME=$(basename "$ZIP")
     BUILD_DATE=$(date "+%Y-%m-%d %H:%M:%S")
-    
+
     MD5_HASH=$(md5sum "$ZIP" | awk '{ print $1 }')
     SHA256_HASH=$(sha256sum "$ZIP" | awk '{ print $1 }')
 
@@ -108,7 +103,6 @@ if [[ -f "$ZIP" ]]; then
 ⏱️ <b>Total Build Time:</b> $TOTAL_BUILD_TIME
 🔐 <b>MD5:</b> <code>$MD5_HASH</code>
 🛡️ <b>SHA-256:</b> <code>$SHA256_HASH</code>"
-
 else
     edit_msg "❌ <b>Build Failed: AxionAOSP for fog/wind/rain.</b>
 No zip found in $ROM_DIR."
@@ -129,7 +123,6 @@ if [[ -n "$PD_ID" ]]; then
 else
     send_msg "❌ Pixeldrain upload failed.
 API Response: <code>$PD_RESPONSE</code>"
-    popd > /dev/null
 fi
 
 popd > /dev/null
