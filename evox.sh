@@ -1,7 +1,5 @@
 #!/bin/bash
 
-START_TIME=$(date +%s)
-
 TG_TOKEN="8720742374:AAFhqX9pfzrTKeYu-IO_X08RSHTSjwIuu1c"
 TG_CHAT_ID="6087243184"
 ROM_DIR="out/target/product/fog"
@@ -32,13 +30,15 @@ send_msg() {
 
 send_initial_msg
 
+START_TIME=$(date +%s)
+
 rm -rf packages/apps/Updater \
        frameworks/av
 
 repo init -u https://github.com/Evolution-X/manifest -b bq2 --git-lfs
 
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-#safer sync
+# SAFER SYNC
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
 pushd packages/apps/Updater
@@ -98,10 +98,10 @@ if [[ -f "$ZIP" ]]; then
 
 📦 <b>File:</b> <code>$FILENAME</code>
 📱 <b>Device:</b> Redmi 10C (fog/wind/rain)
-⏰ <b>Time:</b> $BUILD_DATE
+⏰ <b>Build Date & Time:</b> $BUILD_DATE
 ⏱️ <b>Total Build Time:</b> $TOTAL_BUILD_TIME
 🔐 <b>MD5:</b> <code>$MD5_HASH</code>
-🛡️ <b>SHA-256:</b> <code>$SHA256_HASH</code>"
+🛡️ <b>SHA256:</b> <code>$SHA256_HASH</code>"
 else
     edit_msg "❌ <b>Build Failed: EvolutionX for fog/wind/rain.</b>
 No zip found in $ROM_DIR."
