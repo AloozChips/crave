@@ -46,9 +46,9 @@ git fetch https://github.com/AloozChips/axion_updater.git ef1ac7e9a79d308ab95f8f
 git cherry-pick ef1ac7e9a79d308ab95f8fe03caeaa6f3c2821dd || git cherry-pick --abort
 popd
 
-pushd bionic
-git revert 9857de532657f1f0d5147bbbbb713e281e514670 --no-edit || git revert --abort
-popd
+# pushd bionic
+# git revert 9857de532657f1f0d5147bbbbb713e281e514670 --no-edit || git revert --abort
+# popd
 
 rm -rf device/xiaomi/fog \
        vendor/xiaomi/fog \
