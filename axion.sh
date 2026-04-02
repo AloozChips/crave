@@ -7,7 +7,7 @@ ROM_DIR="out/target/product/fog"
 send_initial_msg() {
     RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
         -d chat_id="$TG_CHAT_ID" \
-        -d text="🚀 <b>Build Started: AxionAOSP for fog/wind/rain</b>" \
+        --data-urlencode text="🚀 <b>Build Started: AxionAOSP for fog/wind/rain</b>" \
         -d parse_mode="HTML")
 
     MSG_ID=$(echo "$RESPONSE" | grep -oP '"message_id":\K[0-9]+')
@@ -17,14 +17,14 @@ edit_msg() {
     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/editMessageText" \
         -d chat_id="$TG_CHAT_ID" \
         -d message_id="$MSG_ID" \
-        -d text="$1" \
+        --data-urlencode text="$1" \
         -d parse_mode="HTML" > /dev/null
 }
 
 send_msg() {
     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
         -d chat_id="$TG_CHAT_ID" \
-        -d text="$1" \
+        --data-urlencode text="$1" \
         -d parse_mode="HTML" > /dev/null
 }
 
