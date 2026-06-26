@@ -79,7 +79,7 @@ export PERF_ANIM_OVERRIDE=false
 . build/envsetup.sh
 lunch lineage_fog-cp2a-user
 m installclean
-m evolution -j$(nproc --all)
+m evolution
 
 END_TIME=$(date +%s)
 DIFF=$((END_TIME - START_TIME))
