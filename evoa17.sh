@@ -54,10 +54,6 @@ rm -rf device/xiaomi/fog \
        vendor/xiaomi/fog \
        device/xiaomi/fog-kernel \
        hardware/xiaomi \
-       # vendor/xiaomi/camera \
-       # packages/apps/ViPER4AndroidFX \
-       # packages/apps/DolbyUI \
-       # hardware/dolby \
        out/target/product/fog
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evoxa17 --depth 1
