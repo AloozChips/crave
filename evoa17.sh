@@ -13,13 +13,13 @@ send_initial_msg() {
     MSG_ID=$(echo "$RESPONSE" | grep -oP '"message_id":\K[0-9]+')
 }
 
-edit_msg() {
-    curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/editMessageText" \
-        -d chat_id="$TG_CHAT_ID" \
-        -d message_id="$MSG_ID" \
-        --data-urlencode text="$1" \
-        -d parse_mode="HTML" > /dev/null
-}
+# edit_msg() {
+#     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/editMessageText" \
+#         -d chat_id="$TG_CHAT_ID" \
+#         -d message_id="$MSG_ID" \
+#         --data-urlencode text="$1" \
+#         -d parse_mode="HTML" > /dev/null
+# }
 
 send_msg() {
     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
@@ -35,7 +35,7 @@ START_TIME=$(date +%s)
 # rm -rf packages/apps/Updater \
 #        frameworks/av
 
-repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs
+repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs --depth 1
 
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
@@ -50,11 +50,11 @@ repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs
 # git cherry-pick 87e34c4d0fc6cee7ec7f0e5c34bf84d3105c1f59 || git cherry-pick --abort
 # popd
 
-rm -rf device/xiaomi/fog \
+rm -rf out/target/product/fog \
+       device/xiaomi/fog \
        vendor/xiaomi/fog \
        device/xiaomi/fog-kernel \
-       hardware/xiaomi \
-       out/target/product/fog
+       hardware/xiaomi
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evoxa17 --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b baklava-and-beyond --depth 1
@@ -86,19 +86,21 @@ ZIP=$(find "$ROM_DIR" -maxdepth 1 -type f -iname "*evolution*.zip" -printf '%T@ 
 if [[ -f "$ZIP" ]]; then
     FILENAME=$(basename "$ZIP")
     BUILD_DATE=$(date "+%Y-%m-%d %H:%M:%S")
+    FILE_SIZE=$(stat -c%s "$ZIP")
     MD5_HASH=$(md5sum "$ZIP" | awk '{ print $1 }')
     SHA256_HASH=$(sha256sum "$ZIP" | awk '{ print $1 }')
 
-    edit_msg "✅ <b>Build Completed!</b> 🎉
+    send_msg "✅ <b>Build Completed!</b> 🎉
 
 📦 <b>File:</b> <code>$FILENAME</code>
+📊 <b>Size:</b> <code>$FILE_SIZE</code> bytes
 📱 <b>Device:</b> Redmi 10C (fog/wind/rain)
 ⏰ <b>Build Date & Time:</b> $BUILD_DATE
 ⏱️ <b>Total Build Time:</b> $TOTAL_BUILD_TIME
 🔐 <b>MD5:</b> <code>$MD5_HASH</code>
 🛡️ <b>SHA256:</b> <code>$SHA256_HASH</code>"
 else
-    edit_msg "❌ <b>Build Failed: EvolutionX for fog/wind/rain.</b>
+    send_msg "❌ <b>Build Failed: EvolutionX for fog/wind/rain.</b>
 No zip found in $ROM_DIR."
     exit 1
 fi
