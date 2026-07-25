@@ -74,7 +74,7 @@ export PERF_ANIM_OVERRIDE=false
 
 . build/envsetup.sh
 lunch lineage_fog-cp2a-user
-m installclean
+make clean
 m evolution
 
 END_TIME=$(date +%s)
