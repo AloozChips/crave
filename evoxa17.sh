@@ -54,7 +54,8 @@ rm -rf out/target/product/fog \
        device/xiaomi/fog \
        vendor/xiaomi/fog \
        device/xiaomi/fog-kernel \
-       hardware/xiaomi
+       hardware/xiaomi \
+       vendor/evolution-priv/keys
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evoxa17 --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b baklava-and-beyond --depth 1
@@ -64,6 +65,12 @@ git clone https://github.com/LineageOS/android_hardware_xiaomi.git hardware/xiao
 # git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.git packages/apps/ViPER4AndroidFX -b bka --depth 1
 # git clone https://github.com/swiitch-OFF-Lab/packages_apps_DolbyUI.git packages/apps/DolbyUI -b 16.0 --depth 1
 # git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-1.5 --depth 1
+
+git clone https://github.com/Evolution-X/vendor_evolution-priv_keys-template.git vendor/evolution-priv/keys --depth 1
+pushd vendor/evolution-priv/keys
+chmod +x keys.sh
+./keys.sh
+popd
 
 export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
