@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TG_TOKEN="8720742374:AAF9YOo13cK3IbvtOk8LebPQLTPlVQffzrE"
+TG_TOKEN="8720742374:AAGFZShorsRBefUigAUrX8pDSUdqFezVdvs"
 TG_CHAT_ID="6087243184"
 ROM_DIR="out/target/product/fog"
 
@@ -81,7 +81,7 @@ export PERF_ANIM_OVERRIDE=false
 
 . build/envsetup.sh
 lunch lineage_fog-cp2a-user
-make clean
+m installclean
 m evolution
 
 END_TIME=$(date +%s)
