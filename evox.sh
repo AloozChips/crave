@@ -38,7 +38,7 @@ rm -rf packages/apps/Updater \
 repo init -u https://github.com/Evolution-X/manifest -b bka --git-lfs --depth 1
 
 if ! /opt/crave/resync.sh; then
-    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags || true
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 fi
 
 rm -rf vendor/gms
