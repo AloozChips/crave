@@ -37,8 +37,16 @@ rm -rf packages/apps/Updater \
 
 repo init -u https://github.com/Evolution-X/manifest -b bka --git-lfs --depth 1
 
-/opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-/opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+if ! /opt/crave/resync.sh; then
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags || true
+fi
+
+rm -rf vendor/gms
+git clone https://github.com/Evolution-X/vendor_gms.git vendor/gms -b bka --depth 1
+if ! git -C vendor/gms lfs pull; then
+    rm -rf vendor/gms
+    git clone https://github.com/Evolution-X/vendor_gms.git vendor/gms -b bka --depth 1
+fi
 
 pushd packages/apps/Updater
 git fetch https://github.com/AloozChips/evo_updater.git a633145592f88ac8c36236b20eead2047b9dc540
