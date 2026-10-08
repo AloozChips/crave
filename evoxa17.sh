@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TG_TOKEN="8720742374:AAGFZShorsRBefUigAUrX8pDSUdqFezVdvs"
+TG_TOKEN="8720742374:AAHJo0iLWaX30qf39iA-J71hrGXs2a-AAEE"
 TG_CHAT_ID="6087243184"
 ROM_DIR="out/target/product/fog"
 
@@ -9,17 +9,16 @@ send_initial_msg() {
         -d chat_id="$TG_CHAT_ID" \
         --data-urlencode text="🚀 <b>Build Started: EvolutionX for fog/wind/rain</b>" \
         -d parse_mode="HTML")
-
     MSG_ID=$(echo "$RESPONSE" | grep -oP '"message_id":\K[0-9]+')
 }
 
-# edit_msg() {
-#     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/editMessageText" \
-#         -d chat_id="$TG_CHAT_ID" \
-#         -d message_id="$MSG_ID" \
-#         --data-urlencode text="$1" \
-#         -d parse_mode="HTML" > /dev/null
-# }
+edit_msg() {
+    curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/editMessageText" \
+        -d chat_id="$TG_CHAT_ID" \
+        -d message_id="$MSG_ID" \
+        --data-urlencode text="$1" \
+        -d parse_mode="HTML" > /dev/null
+}
 
 send_msg() {
     curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
@@ -32,39 +31,47 @@ send_initial_msg
 
 START_TIME=$(date +%s)
 
-# rm -rf packages/apps/Updater \
-#        frameworks/av
+rm -rf packages/apps/Updater \
+       frameworks/av
 
 repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs --depth 1
 
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
-# pushd packages/apps/Updater
-# git fetch https://github.com/AloozChips/evo_updater.git a633145592f88ac8c36236b20eead2047b9dc540
-# git cherry-pick a633145592f88ac8c36236b20eead2047b9dc540 || git cherry-pick --abort
-# popd
+pushd packages/apps/Updater
+git fetch https://github.com/AloozChips/evo_updater.git ec6fa87077e771ccbe16484991bcdedf31c3e03f
+git cherry-pick ec6fa87077e771ccbe16484991bcdedf31c3e03f || git cherry-pick --abort
+popd
 
-# pushd frameworks/av
-# git fetch https://github.com/AloozChips/frameworks_av.git 87e34c4d0fc6cee7ec7f0e5c34bf84d3105c1f59
-# git cherry-pick 87e34c4d0fc6cee7ec7f0e5c34bf84d3105c1f59 || git cherry-pick --abort
-# popd
+pushd frameworks/av
+git fetch https://github.com/AloozChips/frameworks_av.git bc89c233ec81d1bb91407acdf71757df4e3f1c49
+git cherry-pick bc89c233ec81d1bb91407acdf71757df4e3f1c49 || git cherry-pick --abort
+popd
+
+# Soong memory-stall fix (Thanks to LinAndr)
+
+mv build/soong/cmd/soong_build/main.go build/soong/cmd/soong_build/main.go.bak
+wget -O build/soong/cmd/soong_build/main.go https://github.com/yaap-17-stone/build_soong/raw/f9c27b0b9298f6eeee9a850346e0a646c3eaeb87/cmd/soong_build/main.go
 
 rm -rf out/target/product/fog \
        device/xiaomi/fog \
        vendor/xiaomi/fog \
        device/xiaomi/fog-kernel \
        hardware/xiaomi \
-       vendor/evolution-priv/keys
+       vendor/xiaomi/camera \
+       packages/apps/ViPER4AndroidFX \
+       hardware/dolby \
+       packages/apps/DolbyUI
 
-git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evoxa17 --depth 1
-git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b baklava-and-beyond --depth 1
+git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evox-cnb --depth 1
+git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b cp2a --depth 1
 git clone https://github.com/AloozChips/device_xiaomi_fog-kernel.git device/xiaomi/fog-kernel -b motregen --depth 1
-git clone https://github.com/LineageOS/android_hardware_xiaomi.git hardware/xiaomi -b lineage-23.2 --depth 1
-# git clone https://gitlab.com/ThankYouMario/proprietary_vendor_xiaomi_camera.git vendor/xiaomi/camera -b vauxite-sm6225 --depth 1
-# git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.git packages/apps/ViPER4AndroidFX -b bka --depth 1
-# git clone https://github.com/swiitch-OFF-Lab/packages_apps_DolbyUI.git packages/apps/DolbyUI -b 16.0 --depth 1
-# git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-1.5 --depth 1
+git clone https://github.com/LineageOS/android_hardware_xiaomi.git hardware/xiaomi -b lineage-24.0 --depth 1
+git clone https://gitlab.com/ThankYouMario/proprietary_vendor_xiaomi_camera.git vendor/xiaomi/camera -b vauxite-sm6225 --depth 1
+git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.git packages/apps/ViPER4AndroidFX -b cnb --depth 1
+git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-A17 --depth 1
+git clone https://github.com/swiitch-OFF-Lab/packages_apps_DolbyUI.git packages/apps/DolbyUI -b a --depth 1
 
 git clone https://github.com/Evolution-X/vendor_evolution-priv_keys-template.git vendor/evolution-priv/keys --depth 1
 pushd vendor/evolution-priv/keys
