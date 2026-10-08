@@ -49,10 +49,12 @@ git fetch https://github.com/AloozChips/frameworks_av.git bc89c233ec81d1bb91407a
 git cherry-pick bc89c233ec81d1bb91407acdf71757df4e3f1c49 || git cherry-pick --abort
 popd
 
-# Soong memory-stall fix (Thanks to LinAndr)
+# Soong and compilation memory-stall fix (Thanks to LinAndr)
 
-mv build/soong/cmd/soong_build/main.go build/soong/cmd/soong_build/main.go.bak
 wget -O build/soong/cmd/soong_build/main.go https://github.com/yaap-17-stone/build_soong/raw/f9c27b0b9298f6eeee9a850346e0a646c3eaeb87/cmd/soong_build/main.go
+wget -O build/soong/java/droidstubs.go https://github.com/SourceLab081/uploadz/releases/download/v0.1.8/droidstubs.go
+wget -O build/soong/java/config/config.go https://github.com/SourceLab081/uploadz/releases/download/v0.1.8/config.go
+wget -O build/soong/java/config/kotlin.go https://github.com/SourceLab081/uploadz/releases/download/v0.1.8/kotlin.go
 
 rm -rf out/target/product/fog \
        device/xiaomi/fog \
