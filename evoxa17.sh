@@ -75,12 +75,6 @@ git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.g
 git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-A17 --depth 1
 git clone https://github.com/swiitch-OFF-Lab/packages_apps_DolbyUI.git packages/apps/DolbyUI -b a --depth 1
 
-git clone https://github.com/Evolution-X/vendor_evolution-priv_keys-template.git vendor/evolution-priv/keys --depth 1
-pushd vendor/evolution-priv/keys
-chmod +x keys.sh
-./keys.sh
-popd
-
 export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
 export BUILD_HOSTNAME=crave
