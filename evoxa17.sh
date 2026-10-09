@@ -73,7 +73,7 @@ git clone https://github.com/LineageOS/android_hardware_xiaomi.git hardware/xiao
 git clone https://gitlab.com/ThankYouMario/proprietary_vendor_xiaomi_camera.git vendor/xiaomi/camera -b vauxite-sm6225 --depth 1
 git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.git packages/apps/ViPER4AndroidFX -b cnb --depth 1
 git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-A17 --depth 1
-git clone https://github.com/swiitch-OFF-Lab/packages_apps_DolbyUI.git packages/apps/DolbyUI -b a --depth 1
+git clone https://github.com/AloozChips/packages_apps_DolbyUI.git packages/apps/DolbyUI -b 16 --depth 1
 
 export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
