@@ -64,7 +64,8 @@ rm -rf out/target/product/fog \
        vendor/xiaomi/camera \
        packages/apps/ViPER4AndroidFX \
        hardware/dolby \
-       packages/apps/DolbyUI
+       packages/apps/DolbyUI \
+       vendor/evolution-priv/keys
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evox-cnb --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b cp2a --depth 1
@@ -74,6 +75,12 @@ git clone https://gitlab.com/ThankYouMario/proprietary_vendor_xiaomi_camera.git 
 git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.git packages/apps/ViPER4AndroidFX -b cnb --depth 1
 git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-A17 --depth 1
 git clone https://github.com/AloozChips/packages_apps_DolbyUI.git packages/apps/DolbyUI -b 16 --depth 1
+git clone https://github.com/Evolution-X/vendor_evolution-priv_keys-template.git vendor/evolution-priv/keys --depth 1
+
+pushd vendor/evolution-priv/keys
+chmod +x keys.sh
+./keys.sh
+popd
 
 export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
