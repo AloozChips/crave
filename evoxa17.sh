@@ -49,6 +49,11 @@ git fetch https://github.com/AloozChips/frameworks_av.git bc89c233ec81d1bb91407a
 git cherry-pick bc89c233ec81d1bb91407acdf71757df4e3f1c49 || git cherry-pick --abort
 popd
 
+pushd packages/apps/Settings
+git fetch https://github.com/AloozChips/evo_Settings.git 7eedb6bf1310ec3b6f78cb0bb99d644199c4575f
+git cherry-pick 7eedb6bf1310ec3b6f78cb0bb99d644199c4575f || git cherry-pick --abort
+popd
+
 # Soong and compilation memory-stall fix (Thanks to LinAndr)
 
 wget -O build/soong/cmd/soong_build/main.go https://github.com/yaap-17-stone/build_soong/raw/f9c27b0b9298f6eeee9a850346e0a646c3eaeb87/cmd/soong_build/main.go
@@ -64,8 +69,7 @@ rm -rf out/target/product/fog \
        vendor/xiaomi/camera \
        packages/apps/ViPER4AndroidFX \
        hardware/dolby \
-       packages/apps/DolbyUI \
-       vendor/evolution-priv/keys
+       packages/apps/DolbyUI
 
 git clone https://github.com/AloozChips/device_xiaomi_fog.git device/xiaomi/fog -b evox-cnb --depth 1
 git clone https://github.com/AloozChips/vendor_xiaomi_fog.git vendor/xiaomi/fog -b cp2a --depth 1
@@ -75,12 +79,13 @@ git clone https://gitlab.com/ThankYouMario/proprietary_vendor_xiaomi_camera.git 
 git clone https://github.com/Evolution-X-Devices/packages_apps_ViPER4AndroidFX.git packages/apps/ViPER4AndroidFX -b cnb --depth 1
 git clone https://github.com/swiitch-OFF-Lab/hardware_dolby.git hardware/dolby -b sony-A17 --depth 1
 git clone https://github.com/AloozChips/packages_apps_DolbyUI.git packages/apps/DolbyUI -b 16 --depth 1
-git clone https://github.com/Evolution-X/vendor_evolution-priv_keys-template.git vendor/evolution-priv/keys --depth 1
 
-pushd vendor/evolution-priv/keys
-chmod +x keys.sh
-./keys.sh
-popd
+#rm -rf vendor/evolution-priv/keys
+#git clone https://github.com/Evolution-X/vendor_evolution-priv_keys-template.git vendor/evolution-priv/keys --depth 1
+#pushd vendor/evolution-priv/keys
+#chmod +x keys.sh
+#./keys.sh
+#popd
 
 export TZ=Asia/Dhaka
 export BUILD_USERNAME=AloozChips
