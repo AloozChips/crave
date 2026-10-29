@@ -50,8 +50,8 @@ git cherry-pick bc89c233ec81d1bb91407acdf71757df4e3f1c49 || git cherry-pick --ab
 popd
 
 pushd packages/apps/Settings
-git fetch https://github.com/AloozChips/evo_Settings.git 7eedb6bf1310ec3b6f78cb0bb99d644199c4575f
-git cherry-pick 7eedb6bf1310ec3b6f78cb0bb99d644199c4575f || git cherry-pick --abort
+git fetch https://github.com/AloozChips/evo_Settings.git e725e671d4e0f6aaf1e6ad62621f8454fbe735f2
+git cherry-pick e725e671d4e0f6aaf1e6ad62621f8454fbe735f2 || git cherry-pick --abort
 popd
 
 # Soong and compilation memory-stall fix (Thanks to LinAndr)
