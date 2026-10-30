@@ -40,8 +40,8 @@ repo init -u https://github.com/Evolution-X/manifest -b cnb --git-lfs --depth 1
 /opt/crave/resync.sh || repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
 pushd packages/apps/Updater
-git fetch https://github.com/AloozChips/evo_updater.git ec6fa87077e771ccbe16484991bcdedf31c3e03f
-git cherry-pick ec6fa87077e771ccbe16484991bcdedf31c3e03f || git cherry-pick --abort
+git fetch https://github.com/AloozChips/evo_updater.git 7f0805db4db2dd488e7dc184ee3d6f7910827dbc
+git cherry-pick 7f0805db4db2dd488e7dc184ee3d6f7910827dbc || git cherry-pick --abort
 popd
 
 pushd frameworks/av
